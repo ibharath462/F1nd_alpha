@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:theme="@style/AppTheme"
+    android:background="@drawable/rounded"
+    android:alpha="0.95"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/word"
+        android:layout_width="match_parent"
+        android:layout_marginTop="50dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textSize="28sp"
+        android:gravity="center"
+        android:background="@android:color/transparent"
+        android:inputType="textPersonName"
+        android:text="" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="2dip"
+        android:layout_marginTop="8dp"
+        android:background="#000000" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/meaning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:text="TextView"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp"
+                    android:visibility="invisible" />
+            </LinearLayout>
+        </ScrollView>
+
+
+        <ListView
+            android:id="@+id/lv"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"/>
+
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/mainFAB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:alpha="1"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="@android:color/holo_red_light"
+            app:srcCompat="@android:drawable/ic_menu_search" />
+
+    </RelativeLayout>
+
+</LinearLayout>
