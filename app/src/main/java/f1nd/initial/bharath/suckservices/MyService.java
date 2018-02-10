@@ -84,8 +84,10 @@ public class MyService extends Service {
     static int pieCounter = 1;
     static int remaingWords = 0;
     int[] colors = { Color.rgb(189, 47, 71), Color.rgb(228, 101, 92), Color.rgb(241, 177, 79),
-            Color.rgb(161, 204, 89), Color.rgb(33, 197, 163), Color.rgb(58, 158, 173), Color.rgb(92, 101, 100),Color.rgb(10, 92, 30)};
+                Color.rgb(161, 204, 89), Color.rgb(33, 197, 163), Color.rgb(58, 158, 173), Color.rgb(92, 101, 100),Color.rgb(10, 92, 30)};
 
+    //int[] colors = { Color.rgb(189, 183, 107), Color.rgb(189, 183, 107), Color.rgb(189, 183, 107),
+    //Color.rgb(189, 183, 107), Color.rgb(189, 183, 107), Color.rgb(189, 183, 107), Color.rgb(189, 183, 107),Color.rgb(189, 183, 107)};
 
     public MyService() {
     }
@@ -115,6 +117,10 @@ public class MyService extends Service {
                     ClipData clipData = clipBoard.getPrimaryClip();
                     word = clipData.getItemAt(0).coerceToText(getApplicationContext()).toString();
                     word = word.trim();
+                    word = word.replaceAll("\\d","");
+                    word = word.replaceAll("[^a-zA-Z]"," ");
+                    word = word.replaceAll("^ +| +$|( )+", " ");
+                    word = word.replace("\n", "").replace("\r", "");
                     if(isPause == false && isSearch == false){
                         getMeaning(null);
                     }
@@ -256,22 +262,22 @@ public class MyService extends Service {
         PendingIntent pendingIntentYes = PendingIntent.getBroadcast(this, 12345, yesReceive, PendingIntent.FLAG_UPDATE_CURRENT);
         Log.d("RestartServiceReceiver", "" + prefs.getBoolean("pause",false) + "    " + isPause);
         if(isPause == false){
-            notif.addAction(R.drawable.back_dialog, "Pause", pendingIntentYes);
+            notif.addAction(0, "Pause", pendingIntentYes);
             notif.setColor(getApplicationContext().getResources().getColor(R.color.colorPrimary));
         }else{
-            notif.addAction(R.drawable.back_dialog, "Resume", pendingIntentYes);
+            notif.addAction(0, "Resume", pendingIntentYes);
         }
 
 
         Intent yesReceive2 = new Intent();
         yesReceive2.setAction("Stop");
         PendingIntent pendingIntentYes2 = PendingIntent.getBroadcast(this, 12345, yesReceive2, PendingIntent.FLAG_UPDATE_CURRENT);
-        notif.addAction(R.drawable.back_dialog, "Stop", pendingIntentYes2);
+        notif.addAction(0, "Stop", pendingIntentYes2);
 
         Intent yesReceive3 = new Intent();
         yesReceive3.setAction("Search");
         PendingIntent pendingIntentYes3 = PendingIntent.getBroadcast(this, 12345, yesReceive3, PendingIntent.FLAG_UPDATE_CURRENT);
-        notif.addAction(R.drawable.back_dialog, "Search", pendingIntentYes3);
+        notif.addAction(0, "Search", pendingIntentYes3);
 
         nm.notify(4, notif.getNotification());
 
@@ -456,7 +462,7 @@ public class MyService extends Service {
                     String mmmmMeaning = sWord.getString(lv.getItemAtPosition(i).toString());
                     mmmmMeaning = mmmmMeaning.replaceAll("^ +| +$|( )+", " ");
                     mmmmMeaning = mmmmMeaning.replace("\n", "").replace("\r", "");
-                    m.setText("\n" + mmmmMeaning);
+                    m.setText(mmmmMeaning);
                     meaningFlag = true;
                     w.setEnabled(false);
                     w.setTextSize(28);
@@ -521,7 +527,7 @@ public class MyService extends Service {
                 if(isSearch){
                     isSearch = false;
                 }
-                m.setText("\n" + meaning);
+                m.setText(meaning);
                 m.setVisibility(View.VISIBLE);
                 w.setEnabled(false);
                 w.setTextSize(28);

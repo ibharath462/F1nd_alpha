@@ -1,6 +1,7 @@
 package f1nd.initial.bharath.suckservices;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,10 +30,12 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
         }else{
             startClipBoardHandler();
         }
+
+
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -86,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(getApplicationContext(),"Permisions granted :-)",Toast.LENGTH_SHORT).show();
                     getPermissions();
-                    dbPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
+                    dbPath = getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
                     dbName = "dict";
                     try {
                         copyDataBase();
@@ -103,13 +110,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getPermissions(){
+
         if(Build.VERSION.SDK_INT >= 23) {
             if (!Settings.canDrawOverlays(MainActivity.this)) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                        Uri.parse("package:" + getPackageName()));
-                startActivityForResult(intent, 1234);
+
+                try{
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+                    startActivityForResult(intent, 1234);
+                }catch (ActivityNotFoundException e){
+
+                    Log.d("RestartServiceReceiver", "Exception" + e );
+                }
+
             }
+
+
         }
+
+
     }
 
     public void startClipBoardHandler(){
@@ -127,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
         myInput = res.openRawResource(R.raw.dict);
         // Path to the just created empty db
         String outFileName = dbPath + dbName;
+        Log.d("RestartServiceReceiver", "" + outFileName);
         //Open the empty db as the output stream
         OutputStream myOutput = new FileOutputStream(outFileName);
         //transfer bytes from the inputfile to the outputfile

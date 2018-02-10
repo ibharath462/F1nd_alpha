@@ -22,7 +22,7 @@ public class dbHandler extends SQLiteOpenHelper{
     public static final String MEANING = "meaning";
     private SQLiteDatabase database;
 
-    private  String DB_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
+    private  String DB_PATH = "";
 
     private  String DB_NAME = "dict";
 
@@ -53,10 +53,12 @@ public class dbHandler extends SQLiteOpenHelper{
     }
 
     public JSONObject search(String q){
+        DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
         String myPath = DB_PATH + DB_NAME;
+        Log.d("RestartServiceReceiver", "" + myPath);
         //Log.i("Database22: ", "" + q);
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-        String selectQuery = "SELECT  * FROM dict WHERE "+WORD+" LIKE '"+q+"%' limit 10";
+        String selectQuery = "SELECT  * FROM dict WHERE UPPER("+WORD+") LIKE '"+q.toUpperCase()+"%' limit 10";
         Cursor cursor = database.rawQuery(selectQuery, null);
         JSONObject t = new JSONObject();
         if (cursor.moveToFirst()) {
@@ -75,7 +77,9 @@ public class dbHandler extends SQLiteOpenHelper{
 
     public String getMeaning(String word){
         String meaning = "";
+        DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
         String myPath = DB_PATH + DB_NAME;
+        Log.d("RestartServiceReceiver", "" + myPath);
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
         String query = "SELECT * FROM dict where UPPER(word)='" + word + "'";
         Cursor cursor = database.rawQuery(query,null);
@@ -93,7 +97,9 @@ public class dbHandler extends SQLiteOpenHelper{
     public JSONObject getWordOfTheDay(){
         JSONObject t =new JSONObject();
         Log.v("Database22: ", "Helloooo");
+        DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
         String myPath = DB_PATH + DB_NAME;
+        Log.d("RestartServiceReceiver", "" + myPath);
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
         String selectQuery = "SELECT * FROM dict ORDER BY RANDOM() LIMIT 1;";
         Cursor cursor = database.rawQuery(selectQuery, null);
