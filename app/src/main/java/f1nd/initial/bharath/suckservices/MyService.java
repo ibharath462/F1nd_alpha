@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -66,8 +67,9 @@ public class MyService extends Service {
     WindowManager.LayoutParams p;
     View myView;
     ListView lv;
-    JSONObject sWord;
+    static JSONObject sWord;
     FloatingActionButton hide;
+    static ArrayAdapter<String> mArrayAdapter = null;
     LayoutInflater fac;
 
     static boolean isPause = false;
@@ -230,7 +232,7 @@ public class MyService extends Service {
         Notification.Builder notif;
         NotificationManager nm = null;
         notif = new Notification.Builder(getApplicationContext());
-        notif.setSmallIcon(R.drawable.back_dialog);
+        notif.setSmallIcon(R.drawable.nicon);
         notif.setOngoing(true);
 
 
@@ -428,6 +430,7 @@ public class MyService extends Service {
             public void afterTextChanged(Editable editable) {
                 if(meaningFlag == false){
                     sWord = databaseHelper.search(w.getText().toString());
+                    //new getSearchResults().execute("","","");
                     final ArrayList<String> words = new ArrayList<String>();
                     Iterator<String> iter = sWord.keys();
                     while (iter.hasNext()) {
@@ -439,8 +442,9 @@ public class MyService extends Service {
                             // Something went wrong!
                         }
                     }
-                    ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(MyService.this, android.R.layout.simple_expandable_list_item_1, words);
+                    mArrayAdapter = new ArrayAdapter<String>(MyService.this, R.layout.customlistview, words);
                     lv.setAdapter(mArrayAdapter);
+                    mArrayAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -469,7 +473,7 @@ public class MyService extends Service {
                     w.setText(lv.getItemAtPosition(i).toString());
                     Log.d(TAG, "" + sWord.getString(lv.getItemAtPosition(i).toString()));
                     m.setVisibility(View.VISIBLE);
-                    lv.setVisibility(View.INVISIBLE);
+                    lv.setVisibility(View.GONE);
                     hide.setVisibility(View.VISIBLE);
 
                 } catch (JSONException e1) {
@@ -497,7 +501,7 @@ public class MyService extends Service {
         setListeners();
 
         hide.setVisibility(View.VISIBLE);
-        lv.setVisibility(View.INVISIBLE);
+        lv.setVisibility(View.GONE);
 
     }
 
@@ -536,8 +540,8 @@ public class MyService extends Service {
             }
         }
         else{
-            Log.d(TAG, "Word not found hai...");
-            Toast.makeText(getApplicationContext(),"Word not found",Toast.LENGTH_SHORT).show();
+            Log.d(TAG, word + " not found hai...");
+            Toast.makeText(getApplicationContext(),word + " not found in dictionary",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -578,4 +582,15 @@ public class MyService extends Service {
         super.onTaskRemoved(intent);
 
     }
+
+
+    private class getSearchResults extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            sWord = databaseHelper.search(w.getText().toString());
+            return null;
+        }
+    }
 }
+
+

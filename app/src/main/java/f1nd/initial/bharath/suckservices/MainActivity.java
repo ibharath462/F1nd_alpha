@@ -1,6 +1,7 @@
 package f1nd.initial.bharath.suckservices;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -25,6 +26,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         prefs.edit().putBoolean("pause", false).commit();
         prefs.edit().putBoolean("isAlarmNeeded", false).commit();
         prefs.edit().putBoolean("isCbListenerNeeded", false).commit();
+
 
         res = getResources();
         if(prefs.getBoolean("firstrun", true)){
@@ -182,6 +186,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item= menu.findItem(R.id.action_settings);
+        item.setVisible(false);
+        super.onPrepareOptionsMenu(menu);
+        return true;
     }
 
     public BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
