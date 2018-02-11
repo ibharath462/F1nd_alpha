@@ -34,10 +34,11 @@ public class NotificationListener extends BroadcastReceiver {
 
         }
         if ("Pause".equals(action)) {
-            Toast.makeText(context, "Paused", Toast.LENGTH_SHORT).show();
             if(prefs.getBoolean("pause",false) == false){
+                Toast.makeText(context, "Paused F1nd", Toast.LENGTH_SHORT).show();
                 prefs.edit().putBoolean("pause", true).commit();
             }else{
+                Toast.makeText(context, "Resumed F1nd", Toast.LENGTH_SHORT).show();
                 prefs.edit().putBoolean("pause", false).commit();
             }
             context.sendBroadcast(new Intent("YouWillNeverKillMe"));
@@ -49,7 +50,7 @@ public class NotificationListener extends BroadcastReceiver {
             nm.cancelAll();
             Intent myService = new Intent(context, MyService.class);
             context.stopService(myService);
-            Toast.makeText(context, "Stopped", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Stopped F1nd", Toast.LENGTH_SHORT).show();
 
         }
         else  if ("Search".equals(action)) {

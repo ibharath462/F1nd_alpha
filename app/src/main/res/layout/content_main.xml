@@ -3,23 +3,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@android:color/white"
+    android:background="@android:color/darker_gray"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="f1nd.initial.bharath.suckservices.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TextView
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/platinum"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/help"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textColor="@android:color/black"
+        android:background="@android:color/holo_blue_dark"
         android:gravity="center"
-        android:textSize="48sp"
-        android:textIsSelectable="false"
-        android:text="&lt;this space is left blank intentionally&gt;"
-         />
+        android:textColor="@android:color/white"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:text="Help" />
 
+    <Button
+        android:id="@+id/ss"
+        android:background="@android:color/holo_green_dark"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="START F1nd" />
 
 
 </android.widget.LinearLayout>
